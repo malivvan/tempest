@@ -1,18 +1,18 @@
-package rainstorm
+package tempest
 
 import (
-	"github.com/AndersonBargas/rainstorm/v5/codec"
+	"github.com/malivvan/tempest/codec"
 	bolt "go.etcd.io/bbolt"
 )
 
-// A Node in Rainstorm represents the API to a BoltDB bucket.
+// A Node in Tempest represents the API to a BoltDB bucket.
 type Node interface {
 	Tx
 	TypeStore
 	KeyValueStore
 	BucketScanner
 
-	// From returns a new Rainstorm node with a new bucket root below the current.
+	// From returns a new Tempest node with a new bucket root below the current.
 	// All DB operations on the new node will be executed relative to this bucket.
 	From(addend ...string) Node
 
@@ -27,23 +27,23 @@ type Node interface {
 	// already exist.
 	CreateBucketIfNotExists(tx *bolt.Tx, bucket string) (*bolt.Bucket, error)
 
-	// WithTransaction returns a New Rainstorm node that will use the given transaction.
+	// WithTransaction returns a New Tempest node that will use the given transaction.
 	WithTransaction(tx *bolt.Tx) Node
 
 	// Begin starts a new transaction.
 	Begin(writable bool) (Node, error)
 
-	// Codec used by this instance of Rainstorm
+	// Codec used by this instance of Tempest
 	Codec() codec.MarshalUnmarshaler
 
-	// WithCodec returns a New Rainstorm Node that will use the given Codec.
+	// WithCodec returns a New Tempest Node that will use the given Codec.
 	WithCodec(codec codec.MarshalUnmarshaler) Node
 
-	// WithBatch returns a new Rainstorm Node with the batch mode enabled.
+	// WithBatch returns a new Tempest Node with the batch mode enabled.
 	WithBatch(enabled bool) Node
 }
 
-// A Node in Rainstorm represents the API to a BoltDB bucket.
+// A Node in Tempest represents the API to a BoltDB bucket.
 type node struct {
 	s *DB
 
@@ -60,26 +60,26 @@ type node struct {
 	batchMode bool
 }
 
-// From returns a new Rainstorm Node with a new bucket root below the current.
+// From returns a new Tempest Node with a new bucket root below the current.
 // All DB operations on the new node will be executed relative to this bucket.
 func (n node) From(addend ...string) Node {
 	n.rootBucket = append(n.rootBucket, addend...)
 	return &n
 }
 
-// WithTransaction returns a new Rainstorm Node that will use the given transaction.
+// WithTransaction returns a new Tempest Node that will use the given transaction.
 func (n node) WithTransaction(tx *bolt.Tx) Node {
 	n.tx = tx
 	return &n
 }
 
-// WithCodec returns a new Rainstorm Node that will use the given Codec.
+// WithCodec returns a new Tempest Node that will use the given Codec.
 func (n node) WithCodec(codec codec.MarshalUnmarshaler) Node {
 	n.codec = codec
 	return &n
 }
 
-// WithBatch returns a new Rainstorm Node with the batch mode enabled.
+// WithBatch returns a new Tempest Node with the batch mode enabled.
 func (n node) WithBatch(enabled bool) Node {
 	n.batchMode = enabled
 	return &n
@@ -91,7 +91,7 @@ func (n *node) Bucket() []string {
 	return n.rootBucket
 }
 
-// Codec returns the EncodeDecoder used by this instance of Rainstorm
+// Codec returns the EncodeDecoder used by this instance of Tempest
 func (n *node) Codec() codec.MarshalUnmarshaler {
 	return n.codec
 }

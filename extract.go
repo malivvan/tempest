@@ -1,4 +1,4 @@
-package rainstorm
+package tempest
 
 import (
 	"fmt"
@@ -6,18 +6,18 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/AndersonBargas/rainstorm/v5/index"
+	"github.com/malivvan/tempest/index"
 	bolt "go.etcd.io/bbolt"
 )
 
-// Rainstorm tags
+// Tempest tags
 const (
 	tagID        = "id"
 	tagIdx       = "index"
 	tagUniqueIdx = "unique"
 	tagInline    = "inline"
 	tagIncrement = "increment"
-	indexPrefix  = "__rainstorm_index_"
+	indexPrefix  = "__tempest_index_"
 )
 
 type fieldConfig struct {
@@ -99,7 +99,7 @@ func extractField(value *reflect.Value, field *reflect.StructField, m *structCon
 	var f *fieldConfig
 	var err error
 
-	tag := field.Tag.Get("rainstorm")
+	tag := field.Tag.Get("tempest")
 	if tag != "" {
 		f = &fieldConfig{
 			Name:           field.Name,

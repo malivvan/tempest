@@ -1,10 +1,10 @@
-package rainstorm
+package tempest
 
 import (
 	"os"
 
-	"github.com/AndersonBargas/rainstorm/v5/codec"
-	"github.com/AndersonBargas/rainstorm/v5/index"
+	"github.com/malivvan/tempest/codec"
+	"github.com/malivvan/tempest/index"
 	bolt "go.etcd.io/bbolt"
 )
 
@@ -41,8 +41,8 @@ func Root(root ...string) func(*Options) error {
 	}
 }
 
-// UseDB allows Rainstorm to use an existing open Bolt.DB.
-// Warning: rainstorm.DB.Close() will close the bolt.DB instance.
+// UseDB allows Tempest to use an existing open Bolt.DB.
+// Warning: tempest.DB.Close() will close the bolt.DB instance.
 func UseDB(b *bolt.DB) func(*Options) error {
 	return func(opts *Options) error {
 		opts.path = b.Path()
@@ -72,7 +72,7 @@ func Reverse() func(*index.Options) {
 	}
 }
 
-// Options are used to customize the way Rainstorm opens a database.
+// Options are used to customize the way Tempest opens a database.
 type Options struct {
 	// Handles encoding and decoding of objects
 	codec codec.MarshalUnmarshaler

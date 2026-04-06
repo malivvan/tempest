@@ -1,8 +1,8 @@
-package rainstorm
+package tempest
 
 import (
-	"github.com/AndersonBargas/rainstorm/v5/internal"
-	"github.com/AndersonBargas/rainstorm/v5/q"
+	"github.com/malivvan/tempest/internal"
+	"github.com/malivvan/tempest/q"
 	bolt "go.etcd.io/bbolt"
 )
 
@@ -12,7 +12,7 @@ func (n *node) Select(matchers ...q.Matcher) Query {
 	return newQuery(n, tree)
 }
 
-// Query is the low level query engine used by Rainstorm. It allows to operate searches through an entire bucket.
+// Query is the low level query engine used by Tempest. It allows to operate searches through an entire bucket.
 type Query interface {
 	// Skip matching records by the given number
 	Skip(int) Query

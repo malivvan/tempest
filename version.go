@@ -1,4 +1,4 @@
-package rainstorm
+package tempest
 
-// Version of Rainstorm
+// Version of Tempest
 const Version = "5.2.0"

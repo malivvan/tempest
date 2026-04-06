@@ -7,17 +7,17 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/AndersonBargas/rainstorm/v5"
-	"github.com/AndersonBargas/rainstorm/v5/codec/gob"
-	"github.com/AndersonBargas/rainstorm/v5/index"
+	"github.com/malivvan/tempest"
+	"github.com/malivvan/tempest/codec/gob"
+	"github.com/malivvan/tempest/index"
 	"github.com/stretchr/testify/require"
 	bolt "go.etcd.io/bbolt"
 )
 
 func TestListIndex(t *testing.T) {
-	dir, _ := os.MkdirTemp(os.TempDir(), "rainstorm")
+	dir, _ := os.MkdirTemp(os.TempDir(), "tempest")
 	defer os.RemoveAll(dir)
-	db, _ := rainstorm.Open(filepath.Join(dir, "rainstorm.db"))
+	db, _ := tempest.Open(filepath.Join(dir, "tempest.db"))
 	defer db.Close()
 
 	err := db.Bolt.Update(func(tx *bolt.Tx) error {
@@ -164,9 +164,9 @@ func TestListIndex(t *testing.T) {
 }
 
 func TestListIndexReverse(t *testing.T) {
-	dir, _ := os.MkdirTemp(os.TempDir(), "rainstorm")
+	dir, _ := os.MkdirTemp(os.TempDir(), "tempest")
 	defer os.RemoveAll(dir)
-	db, _ := rainstorm.Open(filepath.Join(dir, "rainstorm.db"))
+	db, _ := tempest.Open(filepath.Join(dir, "tempest.db"))
 	defer db.Close()
 
 	err := db.Bolt.Update(func(tx *bolt.Tx) error {
@@ -209,9 +209,9 @@ func TestListIndexReverse(t *testing.T) {
 }
 
 func TestListIndexAddRemoveID(t *testing.T) {
-	dir, _ := os.MkdirTemp(os.TempDir(), "rainstorm")
+	dir, _ := os.MkdirTemp(os.TempDir(), "tempest")
 	defer os.RemoveAll(dir)
-	db, _ := rainstorm.Open(filepath.Join(dir, "rainstorm.db"))
+	db, _ := tempest.Open(filepath.Join(dir, "tempest.db"))
 	defer db.Close()
 
 	db.Bolt.Update(func(tx *bolt.Tx) error {
@@ -253,9 +253,9 @@ func TestListIndexAddRemoveID(t *testing.T) {
 }
 
 func TestListIndexAllRecords(t *testing.T) {
-	dir, _ := os.MkdirTemp(os.TempDir(), "rainstorm")
+	dir, _ := os.MkdirTemp(os.TempDir(), "tempest")
 	defer os.RemoveAll(dir)
-	db, _ := rainstorm.Open(filepath.Join(dir, "rainstorm.db"))
+	db, _ := tempest.Open(filepath.Join(dir, "tempest.db"))
 	defer db.Close()
 
 	db.Bolt.Update(func(tx *bolt.Tx) error {
@@ -332,9 +332,9 @@ func TestListIndexAllRecords(t *testing.T) {
 }
 
 func TestListIndexRange(t *testing.T) {
-	dir, _ := os.MkdirTemp(os.TempDir(), "rainstorm")
+	dir, _ := os.MkdirTemp(os.TempDir(), "tempest")
 	defer os.RemoveAll(dir)
-	db, _ := rainstorm.Open(filepath.Join(dir, "rainstorm.db"))
+	db, _ := tempest.Open(filepath.Join(dir, "tempest.db"))
 	defer db.Close()
 
 	db.Bolt.Update(func(tx *bolt.Tx) error {
@@ -428,9 +428,9 @@ func TestListIndexRange(t *testing.T) {
 }
 
 func TestListIndexPrefix(t *testing.T) {
-	dir, _ := os.MkdirTemp(os.TempDir(), "rainstorm")
+	dir, _ := os.MkdirTemp(os.TempDir(), "tempest")
 	defer os.RemoveAll(dir)
-	db, _ := rainstorm.Open(filepath.Join(dir, "rainstorm.db"))
+	db, _ := tempest.Open(filepath.Join(dir, "tempest.db"))
 	defer db.Close()
 
 	db.Bolt.Update(func(tx *bolt.Tx) error {
@@ -506,7 +506,7 @@ func countItems(t *testing.T, bucket *bolt.Bucket) int {
 	c := bucket.Cursor()
 	count := 0
 	for k, id := c.First(); k != nil; k, id = c.Next() {
-		if id == nil || bytes.Equal(k, []byte("rainstorm__ids")) {
+		if id == nil || bytes.Equal(k, []byte("tempest__ids")) {
 			continue
 		}
 		count++

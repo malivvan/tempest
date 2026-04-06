@@ -1,5 +1,5 @@
 // Package codec contains sub-packages with different codecs that can be used
-// to encode and decode entities in Rainstorm.
+// to encode and decode entities in Tempest.
 package codec
 
 // MarshalUnmarshaler represents a codec used to marshal and unmarshal entities.

@@ -5,29 +5,29 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/AndersonBargas/rainstorm/v5"
-	"github.com/AndersonBargas/rainstorm/v5/index"
-	"github.com/AndersonBargas/rainstorm/v5/q"
+	"github.com/malivvan/tempest"
+	"github.com/malivvan/tempest/index"
+	"github.com/malivvan/tempest/q"
 	"github.com/stretchr/testify/require"
 	bolt "go.etcd.io/bbolt"
 )
 
 // SimpleLogin represents a simple login model
 type SimpleLogin struct {
-	Email    string `rainstorm:"id"`
+	Email    string `tempest:"id"`
 	Password string
 }
 
 // SimpleProduct represents a simple product model
 type SimpleProduct struct {
-	Barcode     int `rainstorm:"id,increment"`
+	Barcode     int `tempest:"id,increment"`
 	Description string
 }
 
 func TestIDIndex(t *testing.T) {
-	dir, _ := os.MkdirTemp(os.TempDir(), "rainstorm")
+	dir, _ := os.MkdirTemp(os.TempDir(), "tempest")
 	defer os.RemoveAll(dir)
-	db, _ := rainstorm.Open(filepath.Join(dir, "rainstorm.db"))
+	db, _ := tempest.Open(filepath.Join(dir, "tempest.db"))
 	defer db.Close()
 
 	err := db.Init(&SimpleLogin{})
@@ -61,9 +61,9 @@ func TestIDIndex(t *testing.T) {
 }
 
 func TestIDIndexPrefix(t *testing.T) {
-	dir, _ := os.MkdirTemp(os.TempDir(), "rainstorm")
+	dir, _ := os.MkdirTemp(os.TempDir(), "tempest")
 	defer os.RemoveAll(dir)
-	db, _ := rainstorm.Open(filepath.Join(dir, "rainstorm.db"))
+	db, _ := tempest.Open(filepath.Join(dir, "tempest.db"))
 	defer db.Close()
 
 	err := db.Init(&SimpleLogin{})
@@ -101,7 +101,7 @@ func TestIDIndexPrefix(t *testing.T) {
 	}
 	err = db.Prefix("Email", "uni", &simpleLogins, setZeroedLimit)
 	require.Error(t, err)
-	require.True(t, rainstorm.ErrNotFound == err)
+	require.True(t, tempest.ErrNotFound == err)
 
 	setLimit := func(opt *index.Options) {
 		opt.Limit = 1
@@ -111,9 +111,9 @@ func TestIDIndexPrefix(t *testing.T) {
 }
 
 func TestIDIndexRange(t *testing.T) {
-	dir, _ := os.MkdirTemp(os.TempDir(), "rainstorm")
+	dir, _ := os.MkdirTemp(os.TempDir(), "tempest")
 	defer os.RemoveAll(dir)
-	db, _ := rainstorm.Open(filepath.Join(dir, "rainstorm.db"))
+	db, _ := tempest.Open(filepath.Join(dir, "tempest.db"))
 	defer db.Close()
 
 	err := db.Init(&SimpleProduct{})
@@ -146,7 +146,7 @@ func TestIDIndexRange(t *testing.T) {
 
 	err = db.Range("Barcode", 5, 8, &simpleProducts, setZeroedLimit)
 	require.Error(t, err)
-	require.True(t, rainstorm.ErrNotFound == err)
+	require.True(t, tempest.ErrNotFound == err)
 
 	setLimit := func(opt *index.Options) {
 		opt.Limit = 1
@@ -158,9 +158,9 @@ func TestIDIndexRange(t *testing.T) {
 }
 
 func TestIDIndexParams(t *testing.T) {
-	dir, _ := os.MkdirTemp(os.TempDir(), "rainstorm")
+	dir, _ := os.MkdirTemp(os.TempDir(), "tempest")
 	defer os.RemoveAll(dir)
-	db, _ := rainstorm.Open(filepath.Join(dir, "rainstorm.db"))
+	db, _ := tempest.Open(filepath.Join(dir, "tempest.db"))
 	defer db.Close()
 
 	err := db.Bolt.Update(func(tx *bolt.Tx) error {
@@ -197,9 +197,9 @@ func TestIDIndexParams(t *testing.T) {
 }
 
 /*func TestIDIndex(t *testing.T) {
-	dir, _ := os.MkdirTemp(os.TempDir(), "rainstorm")
+	dir, _ := os.MkdirTemp(os.TempDir(), "tempest")
 	defer os.RemoveAll(dir)
-	db, _ := rainstorm.Open(filepath.Join(dir, "rainstorm.db"))
+	db, _ := tempest.Open(filepath.Join(dir, "tempest.db"))
 	defer db.Close()
 
 	err := db.Bolt.Update(func(tx *bolt.Tx) error {
@@ -302,9 +302,9 @@ func TestIDIndexParams(t *testing.T) {
 }
 
 func TestIDIndexRange(t *testing.T) {
-	dir, _ := os.MkdirTemp(os.TempDir(), "rainstorm")
+	dir, _ := os.MkdirTemp(os.TempDir(), "tempest")
 	defer os.RemoveAll(dir)
-	db, _ := rainstorm.Open(filepath.Join(dir, "rainstorm.db"))
+	db, _ := tempest.Open(filepath.Join(dir, "tempest.db"))
 	defer db.Close()
 
 	db.Bolt.Update(func(tx *bolt.Tx) error {
@@ -374,9 +374,9 @@ func TestIDIndexRange(t *testing.T) {
 }
 
 func TestIDIndexPrefix(t *testing.T) {
-	dir, _ := os.MkdirTemp(os.TempDir(), "rainstorm")
+	dir, _ := os.MkdirTemp(os.TempDir(), "tempest")
 	defer os.RemoveAll(dir)
-	db, _ := rainstorm.Open(filepath.Join(dir, "rainstorm.db"))
+	db, _ := tempest.Open(filepath.Join(dir, "tempest.db"))
 	defer db.Close()
 
 	db.Bolt.Update(func(tx *bolt.Tx) error {

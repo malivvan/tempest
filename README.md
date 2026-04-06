@@ -1,17 +1,16 @@
-# Rainstorm
+# Tempest
 
-[![GoDoc](https://godoc.org/github.com/AndersonBargas/rainstorm?status.svg)](https://pkg.go.dev/github.com/AndersonBargas/rainstorm/v5?tab=doc) [![Go Report Card](https://goreportcard.com/badge/github.com/AndersonBargas/rainstorm)](https://goreportcard.com/report/github.com/AndersonBargas/rainstorm) ![GoLang](https://github.com/AndersonBargas/rainstorm/workflows/GoLang/badge.svg)
+[![GoDoc](https://godoc.org/github.com/malivvan/tempest?status.svg)](https://pkg.go.dev/github.com/malivvan/tempest?tab=doc) [![Go Report Card](https://goreportcard.com/badge/github.com/malivvan/tempest)](https://goreportcard.com/report/github.com/malivvan/tempest) ![GoLang](https://github.com/malivvan/tempest/workflows/GoLang/badge.svg)
 
-Rainstorm is a simple and powerful toolkit for [BoltDB](https://github.com/coreos/bbolt), forked from the great [Storm](https://github.com/asdine/storm).
-Basically, Rainstorm provides indexes, a wide range of methods to store and fetch data, an advanced query system, and much more.
+Tempest is a simple and powerful toolkit for [BoltDB](https://github.com/coreos/bbolt), forked from [Rainstorm](https://github.com/AndersonBargas/rainstorm) which is a fork of [Storm](https://github.com/asdine/storm).
+Basically, Tempest provides indexes, a wide range of methods to store and fetch data, an advanced query system, and much more.
 
-In addition to the examples below, see also the [examples in the GoDoc](https://godoc.org/github.com/AndersonBargas/rainstorm#pkg-examples).
+In addition to the examples below, see also the [examples in the GoDoc](https://godoc.org/github.com/malivvan/tempest#pkg-examples).
 
 ## Table of Contents
 
-- [Getting Started](#getting-started)
-- [Main differences from "storm"](#main-differences-from-"storm")
-- [Import Rainstorm](#import-rainstorm)
+- [Getting Started](#getting-started)storm
+- [Import Tempest](#import-tempest)
 - [Open a database](#open-a-database)
 - [Simple CRUD system](#simple-crud-system)
   - [Declare your structures](#declare-your-structures)
@@ -49,23 +48,13 @@ In addition to the examples below, see also the [examples in the GoDoc](https://
 ## Getting Started
 
 ```bash
-GO111MODULE=on go get -u github.com/AndersonBargas/rainstorm/v5
+GO111MODULE=on go get -u github.com/malivvan/tempest
 ```
 
-## Main differences from "storm"
-
-The main differente for now is the primary key indexes. On storm, the PK index (aka ID) is, in fact, a unique index.
-By nature, an ID is already unique, so there's no need to indexing the ID.
-This way, rainstorm uses the Primary Keys as ID so almost every operations over ID index is executed as fast as possible.
-
-Rainstorm emerged from the fork of storm library at version 3.1.0. After renaming the package and their imports to the rainstorm, version 3.2.0 was generated.
-This means that if you want to test the library with the same characteristics that it had at the time of the fork, just use version 3.2.0.
-To take advantage of the performance changes made after the fork, just use version 4 and above.
-
-## Import Rainstorm
+## Import Tempest
 
 ```go
-import "github.com/AndersonBargas/rainstorm/v5"
+import "github.com/malivvan/tempest"
 ```
 
 ## Open a database
@@ -73,7 +62,7 @@ import "github.com/AndersonBargas/rainstorm/v5"
 Quick way of opening a database
 
 ```go
-db, err := rainstorm.Open("my.db")
+db, err := tempest.Open("my.db")
 
 defer db.Close()
 ```
@@ -87,37 +76,37 @@ defer db.Close()
 ```go
 type User struct {
   ID int // primary key
-  Group string `rainstorm:"index"` // this field will be indexed
-  Email string `rainstorm:"unique"` // this field will be indexed with a unique constraint
+  Group string `tempest:"index"` // this field will be indexed
+  Email string `tempest:"unique"` // this field will be indexed with a unique constraint
   Name string // this field will not be indexed
-  Age int `rainstorm:"index"`
+  Age int `tempest:"index"`
 }
 ```
 
-The primary key can be of any type as long as it is not a zero value. Rainstorm will search for the tag `id`, if not present Rainstorm will search for a field named `ID`.
+The primary key can be of any type as long as it is not a zero value. Tempest will search for the tag `id`, if not present Tempest will search for a field named `ID`.
 
 ```go
 type User struct {
-  ThePrimaryKey string `rainstorm:"id"`// primary key
-  Group string `rainstorm:"index"` // this field will be indexed
-  Email string `rainstorm:"unique"` // this field will be indexed with a unique constraint
+  ThePrimaryKey string `tempest:"id"`// primary key
+  Group string `tempest:"index"` // this field will be indexed
+  Email string `tempest:"unique"` // this field will be indexed with a unique constraint
   Name string // this field will not be indexed
 }
 ```
 
-Rainstorm handles tags in nested structures with the `inline` tag
+Tempest handles tags in nested structures with the `inline` tag
 
 ```go
 type Base struct {
-  Ident bson.ObjectId `rainstorm:"id"`
+  Ident bson.ObjectId `tempest:"id"`
 }
 
 type User struct {
-  Base      `rainstorm:"inline"`
-  Group     string `rainstorm:"index"`
-  Email     string `rainstorm:"unique"`
+  Base      `tempest:"inline"`
+  Group     string `tempest:"index"`
+  Email     string `tempest:"unique"`
   Name      string
-  CreatedAt time.Time `rainstorm:"index"`
+  CreatedAt time.Time `tempest:"index"`
 }
 ```
 
@@ -138,7 +127,7 @@ err := db.Save(&user)
 
 user.ID++
 err = db.Save(&user)
-// err == rainstorm.ErrAlreadyExists
+// err == tempest.ErrAlreadyExists
 ```
 
 That's it.
@@ -147,16 +136,16 @@ That's it.
 
 #### Auto Increment
 
-Rainstorm can auto increment integer values so you don't have to worry about that when saving your objects. Also, the new value is automatically inserted in your field.
+Tempest can auto increment integer values so you don't have to worry about that when saving your objects. Also, the new value is automatically inserted in your field.
 
 ```go
 
 type Product struct {
-  Pk                  int `rainstorm:"id,increment"` // primary key with auto increment
+  Pk                  int `tempest:"id,increment"` // primary key with auto increment
   Name                string
-  IntegerField        uint64 `rainstorm:"increment"`
-  IndexedIntegerField uint32 `rainstorm:"index,increment"`
-  UniqueIntegerField  int16  `rainstorm:"unique,increment=100"` // the starting value can be set
+  IntegerField        uint64 `tempest:"increment"`
+  IndexedIntegerField uint32 `tempest:"index,increment"`
+  UniqueIntegerField  int16  `tempest:"unique,increment=100"` // the starting value can be set
 }
 
 p := Product{Name: "Vaccum Cleaner"}
@@ -185,7 +174,7 @@ fmt.Println(p.UniqueIntegerField)
 
 ### Simple queries
 
-Any object can be fetched, indexed or not. Rainstorm uses indexes when available, otherwise it uses the [query system](#advanced-queries).
+Any object can be fetched, indexed or not. Tempest uses indexes when available, otherwise it uses the [query system](#advanced-queries).
 
 #### Fetch one object
 
@@ -198,7 +187,7 @@ err = db.One("Name", "John", &user)
 // err == nil
 
 err = db.One("Name", "Jack", &user)
-// err == rainstorm.ErrNotFound
+// err == tempest.ErrNotFound
 ```
 
 #### Fetch multiple objects
@@ -240,14 +229,14 @@ err := db.Prefix("Name", "Jo", &users)
 
 ```go
 var users []User
-err := db.Find("Group", "staff", &users, rainstorm.Skip(10))
-err = db.Find("Group", "staff", &users, rainstorm.Limit(10))
-err = db.Find("Group", "staff", &users, rainstorm.Reverse())
-err = db.Find("Group", "staff", &users, rainstorm.Limit(10), rainstorm.Skip(10), rainstorm.Reverse())
+err := db.Find("Group", "staff", &users, tempest.Skip(10))
+err = db.Find("Group", "staff", &users, tempest.Limit(10))
+err = db.Find("Group", "staff", &users, tempest.Reverse())
+err = db.Find("Group", "staff", &users, tempest.Limit(10), tempest.Skip(10), tempest.Reverse())
 
-err = db.All(&users, rainstorm.Limit(10), rainstorm.Skip(10), rainstorm.Reverse())
-err = db.AllByIndex("CreatedAt", &users, rainstorm.Limit(10), rainstorm.Skip(10), rainstorm.Reverse())
-err = db.Range("Age", 10, 21, &users, rainstorm.Limit(10), rainstorm.Skip(10), rainstorm.Reverse())
+err = db.All(&users, tempest.Limit(10), tempest.Skip(10), tempest.Reverse())
+err = db.AllByIndex("CreatedAt", &users, tempest.Limit(10), tempest.Skip(10), tempest.Reverse())
+err = db.Range("Age", 10, 21, &users, tempest.Limit(10), tempest.Skip(10), tempest.Reverse())
 ```
 
 #### Delete an object
@@ -306,7 +295,7 @@ Useful when the structure has changed
 ### Advanced queries
 
 For more complex queries, you can use the `Select` method.
-`Select` takes any number of [`Matcher`](https://godoc.org/github.com/AndersonBargas/rainstorm/q#Matcher) from the [`q`](https://godoc.org/github.com/AndersonBargas/rainstorm/q) package.
+`Select` takes any number of [`Matcher`](https://godoc.org/github.com/malivvan/tempest/q#Matcher) from the [`q`](https://godoc.org/github.com/malivvan/tempest/q) package.
 
 Here are some common Matchers:
 
@@ -359,9 +348,9 @@ q.Or(
 )
 ```
 
-You can find the complete list in the [documentation](https://godoc.org/github.com/AndersonBargas/rainstorm/q#Matcher).
+You can find the complete list in the [documentation](https://godoc.org/github.com/malivvan/tempest/q#Matcher).
 
-`Select` takes any number of matchers and wraps them into a `q.And()` so it's not necessary to specify it. It returns a [`Query`](https://godoc.org/github.com/AndersonBargas/rainstorm#Query) type.
+`Select` takes any number of matchers and wraps them into a `q.And()` so it's not necessary to specify it. It returns a [`Query`](https://godoc.org/github.com/malivvan/tempest#Query) type.
 
 ```go
 query := db.Select(q.Gte("Age", 7), q.Lte("Age", 77))
@@ -431,7 +420,7 @@ err = query.Each(new(User), func(record interface{}) error {
 })
 ```
 
-See the [documentation](https://godoc.org/github.com/AndersonBargas/rainstorm#Query) for a complete list of methods.
+See the [documentation](https://godoc.org/github.com/malivvan/tempest#Query) for a complete list of methods.
 
 ### Transactions
 
@@ -460,57 +449,50 @@ return tx.Commit()
 
 ### Options
 
-Rainstorm options are functions that can be passed when constructing you Rainstorm instance. You can pass it any number of options.
+Tempest options are functions that can be passed when constructing you Tempest instance. You can pass it any number of options.
 
 #### BoltOptions
 
-By default, Rainstorm opens a database with the mode `0600` and a timeout of one second.
+By default, Tempest opens a database with the mode `0600` and a timeout of one second.
 You can change this behavior by using `BoltOptions`
 
 ```go
-db, err := rainstorm.Open("my.db", rainstorm.BoltOptions(0600, &bolt.Options{Timeout: 1 * time.Second}))
+db, err := tempest.Open("my.db", tempest.BoltOptions(0600, &bolt.Options{Timeout: 1 * time.Second}))
 ```
 
 #### MarshalUnmarshaler
 
-To store the data in BoltDB, Rainstorm marshals it in JSON by default. If you wish to change this behavior you can pass a codec that implements [`codec.MarshalUnmarshaler`](https://godoc.org/github.com/AndersonBargas/rainstorm/codec#MarshalUnmarshaler) via the [`rainstorm.Codec`](https://godoc.org/github.com/AndersonBargas/rainstorm#Codec) option:
+To store the data in BoltDB, Tempest marshals it in JSON by default. If you wish to change this behavior you can pass a codec that implements [`codec.MarshalUnmarshaler`](https://godoc.org/github.com/malivvan/tempest/codec#MarshalUnmarshaler) via the [`tempest.Codec`](https://godoc.org/github.com/malivvan/tempest#Codec) option:
 
 ```go
-db := rainstorm.Open("my.db", rainstorm.Codec(myCodec))
+db := tempest.Open("my.db", tempest.Codec(myCodec))
 ```
 
 ##### Provided Codecs
 
-You can easily implement your own `MarshalUnmarshaler`, but Rainstorm comes with built-in support for [JSON](https://godoc.org/github.com/AndersonBargas/rainstorm/codec/json) (default), [GOB](https://godoc.org/github.com/AndersonBargas/rainstorm/codec/gob),  [Sereal](https://godoc.org/github.com/AndersonBargas/rainstorm/codec/sereal), [Protocol Buffers](https://godoc.org/github.com/AndersonBargas/rainstorm/codec/protobuf) and [MessagePack](https://godoc.org/github.com/AndersonBargas/rainstorm/codec/msgpack).
+You can easily implement your own `MarshalUnmarshaler`, but Tempest comes with built-in support for [JSON](https://godoc.org/github.com/malivvan/tempest/codec/json) (default) and [GOB](https://godoc.org/github.com/malivvan/tempest/codec/gob).
 
-These can be used by importing the relevant package and use that codec to configure Rainstorm. The example below shows all variants (without proper error handling):
+These can be used by importing the relevant package and use that codec to configure Tempest. The example below shows all variants (without proper error handling):
 
 ```go
 import (
-  "github.com/AndersonBargas/rainstorm/v5"
-  "github.com/AndersonBargas/rainstorm/v5/codec/gob"
-  "github.com/AndersonBargas/rainstorm/v5/codec/json"
-  "github.com/AndersonBargas/rainstorm/v5/codec/sereal"
-  "github.com/AndersonBargas/rainstorm/v5/codec/protobuf"
-  "github.com/AndersonBargas/rainstorm/v5/codec/msgpack"
+  "github.com/malivvan/tempest"
+  "github.com/malivvan/tempest/codec/gob"
+  "github.com/malivvan/tempest/codec/json"
 )
 
-var gobDb, _ = rainstorm.Open("gob.db", rainstorm.Codec(gob.Codec))
-var jsonDb, _ = rainstorm.Open("json.db", rainstorm.Codec(json.Codec))
-var serealDb, _ = rainstorm.Open("sereal.db", rainstorm.Codec(sereal.Codec))
-var protobufDb, _ = rainstorm.Open("protobuf.db", rainstorm.Codec(protobuf.Codec))
-var msgpackDb, _ = rainstorm.Open("msgpack.db", rainstorm.Codec(msgpack.Codec))
+var gobDb, _ = tempest.Open("gob.db", tempest.Codec(gob.Codec))
+var jsonDb, _ = tempest.Open("json.db", tempest.Codec(json.Codec))
 ```
 
-**Tip**: Adding Rainstorm tags to generated Protobuf files can be tricky. A good solution is to use [this tool](https://github.com/favadi/protoc-go-inject-tag) to inject the tags during the compilation.
 
 #### Use existing Bolt connection
 
-You can use an existing connection and pass it to Rainstorm
+You can use an existing connection and pass it to Tempest
 
 ```go
-bDB, _ := bolt.Open(filepath.Join(dir, "bolt.db"), 0600, &bolt.Options{Timeout: 10 * time.Second})
-db := rainstorm.Open("my.db", rainstorm.UseDB(bDB))
+boltDB, _ := bolt.Open(filepath.Join(dir, "bolt.db"), 0600, &bolt.Options{Timeout: 10 * time.Second})
+db := tempest.Open("my.db", tempest.UseDB(boltDB))
 ```
 
 #### Batch mode
@@ -518,14 +500,14 @@ db := rainstorm.Open("my.db", rainstorm.UseDB(bDB))
 Batch mode can be enabled to speed up concurrent writes (see [Batch read-write transactions](https://github.com/coreos/bbolt#batch-read-write-transactions))
 
 ```go
-db := rainstorm.Open("my.db", rainstorm.Batch())
+db := tempest.Open("my.db", tempest.Batch())
 ```
 
 ## Nodes and nested buckets
 
-Rainstorm takes advantage of BoltDB nested buckets feature by using `rainstorm.Node`.
-A `rainstorm.Node` is the underlying object used by `rainstorm.DB` to manipulate a bucket.
-To create a nested bucket and use the same API as `rainstorm.DB`, you can use the `DB.From` method.
+Tempest takes advantage of BoltDB nested buckets feature by using `tempest.Node`.
+A `tempest.Node` is the underlying object used by `tempest.DB` to manipulate a bucket.
+To create a nested bucket and use the same API as `tempest.DB`, you can use the `DB.From` method.
 
 ```go
 repo := db.From("repo")
@@ -590,7 +572,7 @@ n = n.WithCodec(gob.Codec)
 
 ## Simple Key/Value store
 
-Rainstorm can be used as a simple, robust, key/value store that can store anything.
+Tempest can be used as a simple, robust, key/value store that can store anything.
 The key and the value can be of any type as long as the key is not a zero value.
 
 Saving data :
@@ -623,7 +605,7 @@ db.Delete("sessions", someObjectId)
 db.Delete("weird storage", "754-3010")
 ```
 
-You can find other useful methods in the [documentation](https://godoc.org/github.com/AndersonBargas/rainstorm#KeyValueStore).
+You can find other useful methods in the [documentation](https://godoc.org/github.com/malivvan/tempest#KeyValueStore).
 
 ## BoltDB
 
@@ -638,7 +620,7 @@ db.Bolt.View(func(tx *bolt.Tx) error {
 })
 ```
 
-A transaction can be also be passed to Rainstorm
+A transaction can be also be passed to Tempest
 
 ```go
 db.Bolt.Update(func(tx *bolt.Tx) error {

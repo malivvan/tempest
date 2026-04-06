@@ -1,12 +1,12 @@
-package rainstorm
+package tempest
 
 import (
 	"net/mail"
 	"testing"
 	"time"
 
-	"github.com/AndersonBargas/rainstorm/v5/codec/gob"
-	"github.com/AndersonBargas/rainstorm/v5/codec/json"
+	"github.com/malivvan/tempest/codec/gob"
+	"github.com/malivvan/tempest/codec/json"
 	"github.com/stretchr/testify/require"
 	bolt "go.etcd.io/bbolt"
 )

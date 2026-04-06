@@ -1,11 +1,11 @@
-package rainstorm
+package tempest
 
 import (
 	"bytes"
 	"reflect"
 
-	"github.com/AndersonBargas/rainstorm/v5/index"
-	"github.com/AndersonBargas/rainstorm/v5/q"
+	"github.com/malivvan/tempest/index"
+	"github.com/malivvan/tempest/q"
 	bolt "go.etcd.io/bbolt"
 )
 

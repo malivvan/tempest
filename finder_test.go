@@ -1,4 +1,4 @@
-package rainstorm
+package tempest
 
 import (
 	"fmt"
@@ -113,9 +113,9 @@ func TestFindNil(t *testing.T) {
 	defer cleanup()
 
 	type User struct {
-		ID        int        `rainstorm:"increment"`
-		CreatedAt *time.Time `rainstorm:"index"`
-		DeletedAt *time.Time `rainstorm:"unique"`
+		ID        int        `tempest:"increment"`
+		CreatedAt *time.Time `tempest:"index"`
+		DeletedAt *time.Time `tempest:"unique"`
 	}
 
 	t1 := time.Now()
@@ -153,8 +153,8 @@ func TestFindIntIndex(t *testing.T) {
 	defer cleanup()
 
 	type Score struct {
-		ID    int    `rainstorm:"increment"`
-		Score uint64 `rainstorm:"index"`
+		ID    int    `tempest:"increment"`
+		Score uint64 `tempest:"index"`
 	}
 
 	for i := 0; i < 10; i++ {
@@ -490,16 +490,16 @@ func TestOne(t *testing.T) {
 }
 
 func TestOneNotWritable(t *testing.T) {
-	dir, _ := os.MkdirTemp(os.TempDir(), "rainstorm")
+	dir, _ := os.MkdirTemp(os.TempDir(), "tempest")
 	defer os.RemoveAll(dir)
-	db, _ := Open(filepath.Join(dir, "rainstorm.db"))
+	db, _ := Open(filepath.Join(dir, "tempest.db"))
 
 	err := db.Save(&User{ID: 10, Name: "John"})
 	require.NoError(t, err)
 
 	db.Close()
 
-	db, _ = Open(filepath.Join(dir, "rainstorm.db"), BoltOptions(0660, &bolt.Options{
+	db, _ = Open(filepath.Join(dir, "tempest.db"), BoltOptions(0660, &bolt.Options{
 		ReadOnly: true,
 	}))
 	defer db.Close()

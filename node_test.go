@@ -1,10 +1,10 @@
-package rainstorm
+package tempest
 
 import (
 	"testing"
 
-	"github.com/AndersonBargas/rainstorm/v5/codec/gob"
-	"github.com/AndersonBargas/rainstorm/v5/codec/json"
+	"github.com/malivvan/tempest/codec/gob"
+	"github.com/malivvan/tempest/codec/json"
 	"github.com/stretchr/testify/require"
 	bolt "go.etcd.io/bbolt"
 )
@@ -68,7 +68,7 @@ func TestNodeWithCodec(t *testing.T) {
 
 		type User struct {
 			ID   int
-			Name string `rainstorm:"index"`
+			Name string `tempest:"index"`
 		}
 
 		requireBytesEqual := func(raw []byte, expected interface{}) {

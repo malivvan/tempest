@@ -1,4 +1,4 @@
-package rainstorm
+package tempest
 
 import (
 	"io"
@@ -18,7 +18,7 @@ type ClassicNoTags struct {
 
 type ClassicBadTags struct {
 	ID           string
-	PublicField  int `rainstorm:"mrots"`
+	PublicField  int `tempest:"mrots"`
 	privateField string
 	Date         time.Time
 	InlineStruct struct {
@@ -30,45 +30,45 @@ type ClassicBadTags struct {
 
 type ClassicUnique struct {
 	ID            string
-	PublicField   int       `rainstorm:"unique"`
-	privateField  string    `rainstorm:"unique"`
-	privateField2 string    `rainstorm:"unique"`
-	Date          time.Time `rainstorm:"unique"`
+	PublicField   int       `tempest:"unique"`
+	privateField  string    `tempest:"unique"`
+	privateField2 string    `tempest:"unique"`
+	Date          time.Time `tempest:"unique"`
 	InlineStruct  struct {
 		A float32
 		B float64
-	} `rainstorm:"unique"`
-	Interf io.Writer `rainstorm:"unique"`
+	} `tempest:"unique"`
+	Interf io.Writer `tempest:"unique"`
 }
 
 type ClassicIndex struct {
 	ID           string
-	PublicField  int       `rainstorm:"index"`
-	privateField string    `rainstorm:"index"`
-	Date         time.Time `rainstorm:"index"`
+	PublicField  int       `tempest:"index"`
+	privateField string    `tempest:"index"`
+	Date         time.Time `tempest:"index"`
 	InlineStruct struct {
 		a float32
 		B float64
-	} `rainstorm:"index"`
-	InlineStructPtr *UserWithNoID `rainstorm:"index"`
-	Interf          io.Writer     `rainstorm:"index"`
+	} `tempest:"index"`
+	InlineStructPtr *UserWithNoID `tempest:"index"`
+	Interf          io.Writer     `tempest:"index"`
 }
 
 type ClassicInline struct {
-	PublicField  int `rainstorm:"unique"`
-	ClassicIndex `rainstorm:"inline"`
-	*ToEmbed     `rainstorm:"inline"`
-	Date         time.Time `rainstorm:"unique"`
+	PublicField  int `tempest:"unique"`
+	ClassicIndex `tempest:"inline"`
+	*ToEmbed     `tempest:"inline"`
+	Date         time.Time `tempest:"unique"`
 }
 
 type User struct {
-	ID              int       `rainstorm:"id,increment"`
-	Name            string    `rainstorm:"index"`
-	Age             int       `rainstorm:"index,increment"`
-	DateOfBirth     time.Time `rainstorm:"index"`
+	ID              int       `tempest:"id,increment"`
+	Name            string    `tempest:"index"`
+	Age             int       `tempest:"index,increment"`
+	DateOfBirth     time.Time `tempest:"index"`
 	Group           string
 	unexportedField int
-	Slug            string `rainstorm:"unique"`
+	Slug            string `tempest:"unique"`
 }
 
 type ToEmbed struct {
@@ -76,12 +76,12 @@ type ToEmbed struct {
 }
 
 type NestedID struct {
-	ToEmbed `rainstorm:"inline"`
+	ToEmbed `tempest:"inline"`
 	Name    string
 }
 
 type SimpleUser struct {
-	ID   int `rainstorm:"id"`
+	ID   int `tempest:"id"`
 	Name string
 	age  int
 }
@@ -106,32 +106,32 @@ type UserWithStringIDField struct {
 }
 
 type UserWithEmbeddedIDField struct {
-	UserWithIDField `rainstorm:"inline"`
+	UserWithIDField `tempest:"inline"`
 	Age             int
 }
 
 type UserWithEmbeddedField struct {
-	UserWithNoID `rainstorm:"inline"`
+	UserWithNoID `tempest:"inline"`
 	ID           uint64
 }
 
 type UserWithIncrementField struct {
 	ID   int
 	Name string
-	Age  int `rainstorm:"unique,increment"`
+	Age  int `tempest:"unique,increment"`
 }
 
 type IndexedNameUser struct {
-	ID          int    `rainstorm:"id"`
-	Name        string `rainstorm:"index"`
-	Score       int    `rainstorm:"index,increment"`
+	ID          int    `tempest:"id"`
+	Name        string `tempest:"index"`
+	Score       int    `tempest:"index,increment"`
 	age         int
-	DateOfBirth time.Time `rainstorm:"index"`
+	DateOfBirth time.Time `tempest:"index"`
 	Group       string
 }
 
 type UniqueNameUser struct {
-	ID   int    `rainstorm:"id"`
-	Name string `rainstorm:"unique"`
-	Age  int    `rainstorm:"index,increment"`
+	ID   int    `tempest:"id"`
+	Name string `tempest:"unique"`
+	Age  int    `tempest:"index,increment"`
 }

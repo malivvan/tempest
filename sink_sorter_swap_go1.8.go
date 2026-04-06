@@ -1,6 +1,7 @@
+//go:build go1.8
 // +build go1.8
 
-package rainstorm
+package tempest
 
 import "reflect"
 

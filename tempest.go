@@ -1,29 +1,29 @@
-package rainstorm
+package tempest
 
 import (
 	"bytes"
 	"encoding/binary"
 	"time"
 
-	"github.com/AndersonBargas/rainstorm/v5/codec"
-	"github.com/AndersonBargas/rainstorm/v5/codec/json"
+	"github.com/malivvan/tempest/codec"
+	"github.com/malivvan/tempest/codec/json"
 	bolt "go.etcd.io/bbolt"
 )
 
 const (
-	dbinfo         = "__rainstorm_db"
-	metadataBucket = "__rainstorm_metadata"
+	dbinfo         = "__tempest_db"
+	metadataBucket = "__tempest_metadata"
 )
 
 // Defaults to json
 var defaultCodec = json.Codec
 
-// Open opens a database at the given path with optional Rainstorm options.
-func Open(path string, rainstormOptions ...func(*Options) error) (*DB, error) {
+// Open opens a database at the given path with optional Tempest options.
+func Open(path string, tempestOptions ...func(*Options) error) (*DB, error) {
 	var err error
 
 	var opts Options
-	for _, option := range rainstormOptions {
+	for _, option := range tempestOptions {
 		if err = option(&opts); err != nil {
 			return nil, err
 		}

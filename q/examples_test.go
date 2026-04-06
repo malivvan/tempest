@@ -11,8 +11,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/AndersonBargas/rainstorm/v5"
-	"github.com/AndersonBargas/rainstorm/v5/q"
+	"github.com/malivvan/tempest"
+	"github.com/malivvan/tempest/q"
 )
 
 func ExampleRe() {
@@ -36,17 +36,17 @@ func ExampleRe() {
 }
 
 type User struct {
-	ID        int    `rainstorm:"id,increment"`
-	Group     string `rainstorm:"index"`
-	Email     string `rainstorm:"unique"`
+	ID        int    `tempest:"id,increment"`
+	Group     string `tempest:"index"`
+	Email     string `tempest:"unique"`
 	Name      string
-	Age       int       `rainstorm:"index"`
-	CreatedAt time.Time `rainstorm:"index"`
+	Age       int       `tempest:"index"`
+	CreatedAt time.Time `tempest:"index"`
 }
 
-func prepareDB() (string, *rainstorm.DB) {
-	dir, _ := os.MkdirTemp(os.TempDir(), "rainstorm")
-	db, _ := rainstorm.Open(filepath.Join(dir, "rainstorm.db"))
+func prepareDB() (string, *tempest.DB) {
+	dir, _ := os.MkdirTemp(os.TempDir(), "tempest")
+	db, _ := tempest.Open(filepath.Join(dir, "tempest.db"))
 
 	for i, name := range []string{"John", "Norm", "Donald", "Eric", "Dilbert"} {
 		email := strings.ToLower(name + "@provider.com")
