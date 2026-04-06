@@ -12,7 +12,7 @@ type Tx interface {
 }
 
 // Begin starts a new transaction.
-func (n node) Begin(writable bool) (Node, error) {
+func (n *node) Begin(writable bool) (Node, error) {
 	var err error
 
 	n.tx, err = n.s.Bolt.Begin(writable)
@@ -20,7 +20,7 @@ func (n node) Begin(writable bool) (Node, error) {
 		return nil, err
 	}
 
-	return &n, nil
+	return n, nil
 }
 
 // Rollback closes the transaction and ignores all previous updates.

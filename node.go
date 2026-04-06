@@ -62,27 +62,27 @@ type node struct {
 
 // From returns a new Tempest Node with a new bucket root below the current.
 // All DB operations on the new node will be executed relative to this bucket.
-func (n node) From(addend ...string) Node {
+func (n *node) From(addend ...string) Node {
 	n.rootBucket = append(n.rootBucket, addend...)
-	return &n
+	return n
 }
 
 // WithTransaction returns a new Tempest Node that will use the given transaction.
-func (n node) WithTransaction(tx *bolt.Tx) Node {
+func (n *node) WithTransaction(tx *bolt.Tx) Node {
 	n.tx = tx
-	return &n
+	return n
 }
 
 // WithCodec returns a new Tempest Node that will use the given Codec.
-func (n node) WithCodec(codec codec.MarshalUnmarshaler) Node {
+func (n *node) WithCodec(codec codec.MarshalUnmarshaler) Node {
 	n.codec = codec
-	return &n
+	return n
 }
 
 // WithBatch returns a new Tempest Node with the batch mode enabled.
-func (n node) WithBatch(enabled bool) Node {
+func (n *node) WithBatch(enabled bool) Node {
 	n.batchMode = enabled
-	return &n
+	return n
 }
 
 // Bucket returns the bucket name as a slice from the root.
