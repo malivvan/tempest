@@ -15,7 +15,7 @@ type Tx interface {
 func (n node) Begin(writable bool) (Node, error) {
 	var err error
 
-	n.tx, err = n.s.Bolt.Begin(writable)
+	n.tx, err = n.s.Bolt().Begin(writable)
 	if err != nil {
 		return nil, err
 	}

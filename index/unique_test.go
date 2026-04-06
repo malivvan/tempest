@@ -19,7 +19,7 @@ func TestUniqueIndex(t *testing.T) {
 	db, _ := tempest.Open(filepath.Join(dir, "tempest.db"))
 	defer db.Close()
 
-	err := db.Bolt.Update(func(tx *bolt.Tx) error {
+	err := db.Bolt().Update(func(tx *bolt.Tx) error {
 		b, err := tx.CreateBucket([]byte("test"))
 		require.NoError(t, err)
 
@@ -124,7 +124,7 @@ func TestUniqueIndexRange(t *testing.T) {
 	db, _ := tempest.Open(filepath.Join(dir, "tempest.db"))
 	defer db.Close()
 
-	db.Bolt.Update(func(tx *bolt.Tx) error {
+	db.Bolt().Update(func(tx *bolt.Tx) error {
 		b, err := tx.CreateBucket([]byte("test"))
 		require.NoError(t, err)
 
@@ -196,7 +196,7 @@ func TestUniqueIndexPrefix(t *testing.T) {
 	db, _ := tempest.Open(filepath.Join(dir, "tempest.db"))
 	defer db.Close()
 
-	db.Bolt.Update(func(tx *bolt.Tx) error {
+	db.Bolt().Update(func(tx *bolt.Tx) error {
 		b, err := tx.CreateBucket([]byte("test"))
 		require.NoError(t, err)
 

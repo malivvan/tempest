@@ -172,11 +172,11 @@ func (q *query) runQuery(sink sink) error {
 		return q.query(q.node.tx, sink)
 	}
 	if sink.readOnly() {
-		return q.node.s.Bolt.View(func(tx *bolt.Tx) error {
+		return q.node.s.Bolt().View(func(tx *bolt.Tx) error {
 			return q.query(tx, sink)
 		})
 	}
-	return q.node.s.Bolt.Update(func(tx *bolt.Tx) error {
+	return q.node.s.Bolt().Update(func(tx *bolt.Tx) error {
 		return q.query(tx, sink)
 	})
 }

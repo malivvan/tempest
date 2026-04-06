@@ -41,7 +41,7 @@ func Root(root ...string) func(*Options) error {
 	}
 }
 
-// UseDB allows Tempest to use an existing open Bolt.DB.
+// UseDB allows Tempest to use an existing open Bolt().DB.
 // Warning: tempest.DB.Close() will close the bolt.DB instance.
 func UseDB(b *bolt.DB) func(*Options) error {
 	return func(opts *Options) error {

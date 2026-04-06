@@ -31,7 +31,7 @@ func TestNodeWithTransaction(t *testing.T) {
 	defer cleanup()
 
 	var user User
-	db.Bolt.Update(func(tx *bolt.Tx) error {
+	db.Bolt().Update(func(tx *bolt.Tx) error {
 		dbx := db.WithTransaction(tx)
 		err := dbx.Save(&User{ID: 10, Name: "John"})
 		require.NoError(t, err)

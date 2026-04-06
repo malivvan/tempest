@@ -612,7 +612,7 @@ You can find other useful methods in the [documentation](https://godoc.org/githu
 BoltDB is still easily accessible and can be used as usual
 
 ```go
-db.Bolt.View(func(tx *bolt.Tx) error {
+db.Bolt().View(func(tx *bolt.Tx) error {
   bucket := tx.Bucket([]byte("my bucket"))
   val := bucket.Get([]byte("any id"))
   fmt.Println(string(val))
@@ -623,7 +623,7 @@ db.Bolt.View(func(tx *bolt.Tx) error {
 A transaction can be also be passed to Tempest
 
 ```go
-db.Bolt.Update(func(tx *bolt.Tx) error {
+db.Bolt().Update(func(tx *bolt.Tx) error {
   ...
   dbx := db.WithTransaction(tx)
   err = dbx.Save(&user)

@@ -163,7 +163,7 @@ func TestIDIndexParams(t *testing.T) {
 	db, _ := tempest.Open(filepath.Join(dir, "tempest.db"))
 	defer db.Close()
 
-	err := db.Bolt.Update(func(tx *bolt.Tx) error {
+	err := db.Bolt().Update(func(tx *bolt.Tx) error {
 		b, err := tx.CreateBucket([]byte("test"))
 		require.NoError(t, err)
 
@@ -202,7 +202,7 @@ func TestIDIndexParams(t *testing.T) {
 	db, _ := tempest.Open(filepath.Join(dir, "tempest.db"))
 	defer db.Close()
 
-	err := db.Bolt.Update(func(tx *bolt.Tx) error {
+	err := db.Bolt().Update(func(tx *bolt.Tx) error {
 		b, err := tx.CreateBucket([]byte("test"))
 		require.NoError(t, err)
 
@@ -307,7 +307,7 @@ func TestIDIndexRange(t *testing.T) {
 	db, _ := tempest.Open(filepath.Join(dir, "tempest.db"))
 	defer db.Close()
 
-	db.Bolt.Update(func(tx *bolt.Tx) error {
+	db.Bolt().Update(func(tx *bolt.Tx) error {
 		b, err := tx.CreateBucket([]byte("test"))
 		require.NoError(t, err)
 
@@ -379,7 +379,7 @@ func TestIDIndexPrefix(t *testing.T) {
 	db, _ := tempest.Open(filepath.Join(dir, "tempest.db"))
 	defer db.Close()
 
-	db.Bolt.Update(func(tx *bolt.Tx) error {
+	db.Bolt().Update(func(tx *bolt.Tx) error {
 		b, err := tx.CreateBucket([]byte("test"))
 		require.NoError(t, err)
 

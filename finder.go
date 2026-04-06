@@ -67,7 +67,7 @@ func (n *node) One(fieldName string, value interface{}, to interface{}) error {
 		if n.tx != nil {
 			err = query.query(n.tx, sink)
 		} else {
-			err = n.s.Bolt.View(func(tx *bolt.Tx) error {
+			err = n.s.Bolt().View(func(tx *bolt.Tx) error {
 				return query.query(tx, sink)
 			})
 		}

@@ -20,7 +20,7 @@ func TestListIndex(t *testing.T) {
 	db, _ := tempest.Open(filepath.Join(dir, "tempest.db"))
 	defer db.Close()
 
-	err := db.Bolt.Update(func(tx *bolt.Tx) error {
+	err := db.Bolt().Update(func(tx *bolt.Tx) error {
 		b, err := tx.CreateBucket([]byte("test"))
 		require.NoError(t, err)
 
@@ -169,7 +169,7 @@ func TestListIndexReverse(t *testing.T) {
 	db, _ := tempest.Open(filepath.Join(dir, "tempest.db"))
 	defer db.Close()
 
-	err := db.Bolt.Update(func(tx *bolt.Tx) error {
+	err := db.Bolt().Update(func(tx *bolt.Tx) error {
 		b, err := tx.CreateBucket([]byte("test"))
 		require.NoError(t, err)
 
@@ -214,7 +214,7 @@ func TestListIndexAddRemoveID(t *testing.T) {
 	db, _ := tempest.Open(filepath.Join(dir, "tempest.db"))
 	defer db.Close()
 
-	db.Bolt.Update(func(tx *bolt.Tx) error {
+	db.Bolt().Update(func(tx *bolt.Tx) error {
 		b, err := tx.CreateBucket([]byte("test"))
 		require.NoError(t, err)
 
@@ -258,7 +258,7 @@ func TestListIndexAllRecords(t *testing.T) {
 	db, _ := tempest.Open(filepath.Join(dir, "tempest.db"))
 	defer db.Close()
 
-	db.Bolt.Update(func(tx *bolt.Tx) error {
+	db.Bolt().Update(func(tx *bolt.Tx) error {
 		b, err := tx.CreateBucket([]byte("test"))
 		require.NoError(t, err)
 
@@ -337,7 +337,7 @@ func TestListIndexRange(t *testing.T) {
 	db, _ := tempest.Open(filepath.Join(dir, "tempest.db"))
 	defer db.Close()
 
-	db.Bolt.Update(func(tx *bolt.Tx) error {
+	db.Bolt().Update(func(tx *bolt.Tx) error {
 		b, err := tx.CreateBucket([]byte("test"))
 		require.NoError(t, err)
 
@@ -433,7 +433,7 @@ func TestListIndexPrefix(t *testing.T) {
 	db, _ := tempest.Open(filepath.Join(dir, "tempest.db"))
 	defer db.Close()
 
-	db.Bolt.Update(func(tx *bolt.Tx) error {
+	db.Bolt().Update(func(tx *bolt.Tx) error {
 		b, err := tx.CreateBucket([]byte("test"))
 		require.NoError(t, err)
 

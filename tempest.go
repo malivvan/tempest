@@ -15,6 +15,33 @@ const (
 	metadataBucket = "__tempest_metadata"
 )
 
+func (s *DB) GetMeta(key []byte) (val []byte, err error) {
+	err = s.Bolt().View(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte{0})
+		if b == nil {
+			return ErrNotFound
+		}
+		v := b.Get(key)
+		if v == nil {
+			return ErrNotFound
+		}
+		val = make([]byte, len(v))
+		copy(val, v)
+		return nil
+	})
+	return
+}
+
+func (s *DB) SetMeta(key, val []byte) error {
+	return s.Bolt().Update(func(tx *bolt.Tx) error {
+		b, err := tx.CreateBucketIfNotExists([]byte{0})
+		if err != nil {
+			return err
+		}
+		return b.Put(key, val)
+	})
+}
+
 // Defaults to json
 var defaultCodec = json.Codec
 
@@ -30,7 +57,7 @@ func Open(path string, tempestOptions ...func(*Options) error) (*DB, error) {
 	}
 
 	s := DB{
-		Bolt: opts.bolt,
+		bolt: opts.bolt,
 	}
 
 	n := node{
@@ -55,8 +82,8 @@ func Open(path string, tempestOptions ...func(*Options) error) (*DB, error) {
 	s.Node = &n
 
 	// skip if UseDB option is used
-	if s.Bolt == nil {
-		s.Bolt, err = bolt.Open(path, opts.boltMode, opts.boltOptions)
+	if s.bolt == nil {
+		s.bolt, err = bolt.Open(path, opts.boltMode, opts.boltOptions)
 		if err != nil {
 			return nil, err
 		}
@@ -73,16 +100,18 @@ func Open(path string, tempestOptions ...func(*Options) error) (*DB, error) {
 // DB is the wrapper around BoltDB. It contains an instance of BoltDB and uses it to perform all the
 // needed operations
 type DB struct {
-	// The root node that points to the root bucket.
 	Node
+	bolt *bolt.DB
+}
 
-	// Bolt is still easily accessible
-	Bolt *bolt.DB
+// Bolt returns the underlying BoltDB instance.
+func (s *DB) Bolt() *bolt.DB {
+	return s.bolt
 }
 
 // Close the database
 func (s *DB) Close() error {
-	return s.Bolt.Close()
+	return s.Bolt().Close()
 }
 
 func (s *DB) checkVersion() error {
