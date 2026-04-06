@@ -10,7 +10,7 @@ import (
 )
 
 type Score struct {
-	ID    int `tempest:"increment"`
+	ID    int `db:"increment"`
 	Value int
 }
 
@@ -206,7 +206,7 @@ func TestSelectFindOrderBy(t *testing.T) {
 	defer cleanup()
 
 	type T struct {
-		ID  int `tempest:"increment"`
+		ID  int `db:"increment"`
 		Str string
 		Int int
 		Rnd int
@@ -357,7 +357,7 @@ func TestSelectFirstOrderBy(t *testing.T) {
 	defer cleanup()
 
 	type T struct {
-		ID  int `tempest:"increment"`
+		ID  int `db:"increment"`
 		Str string
 		Int int
 	}

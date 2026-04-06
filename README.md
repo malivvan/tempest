@@ -76,10 +76,10 @@ defer db.Close()
 ```go
 type User struct {
   ID int // primary key
-  Group string `tempest:"index"` // this field will be indexed
-  Email string `tempest:"unique"` // this field will be indexed with a unique constraint
+  Group string `db:"index"` // this field will be indexed
+  Email string `db:"unique"` // this field will be indexed with a unique constraint
   Name string // this field will not be indexed
-  Age int `tempest:"index"`
+  Age int `db:"index"`
 }
 ```
 
@@ -87,9 +87,9 @@ The primary key can be of any type as long as it is not a zero value. Tempest wi
 
 ```go
 type User struct {
-  ThePrimaryKey string `tempest:"id"`// primary key
-  Group string `tempest:"index"` // this field will be indexed
-  Email string `tempest:"unique"` // this field will be indexed with a unique constraint
+  ThePrimaryKey string `db:"id"`// primary key
+  Group string `db:"index"` // this field will be indexed
+  Email string `db:"unique"` // this field will be indexed with a unique constraint
   Name string // this field will not be indexed
 }
 ```
@@ -98,15 +98,15 @@ Tempest handles tags in nested structures with the `inline` tag
 
 ```go
 type Base struct {
-  Ident bson.ObjectId `tempest:"id"`
+  Ident bson.ObjectId `db:"id"`
 }
 
 type User struct {
-  Base      `tempest:"inline"`
-  Group     string `tempest:"index"`
-  Email     string `tempest:"unique"`
+  Base      `db:"inline"`
+  Group     string `db:"index"`
+  Email     string `db:"unique"`
   Name      string
-  CreatedAt time.Time `tempest:"index"`
+  CreatedAt time.Time `db:"index"`
 }
 ```
 
@@ -141,11 +141,11 @@ Tempest can auto increment integer values so you don't have to worry about that 
 ```go
 
 type Product struct {
-  Pk                  int `tempest:"id,increment"` // primary key with auto increment
+  Pk                  int `db:"id,increment"` // primary key with auto increment
   Name                string
-  IntegerField        uint64 `tempest:"increment"`
-  IndexedIntegerField uint32 `tempest:"index,increment"`
-  UniqueIntegerField  int16  `tempest:"unique,increment=100"` // the starting value can be set
+  IntegerField        uint64 `db:"increment"`
+  IndexedIntegerField uint32 `db:"index,increment"`
+  UniqueIntegerField  int16  `db:"unique,increment=100"` // the starting value can be set
 }
 
 p := Product{Name: "Vaccum Cleaner"}

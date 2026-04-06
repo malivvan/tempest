@@ -113,9 +113,9 @@ func TestFindNil(t *testing.T) {
 	defer cleanup()
 
 	type User struct {
-		ID        int        `tempest:"increment"`
-		CreatedAt *time.Time `tempest:"index"`
-		DeletedAt *time.Time `tempest:"unique"`
+		ID        int        `db:"increment"`
+		CreatedAt *time.Time `db:"index"`
+		DeletedAt *time.Time `db:"unique"`
 	}
 
 	t1 := time.Now()
@@ -153,8 +153,8 @@ func TestFindIntIndex(t *testing.T) {
 	defer cleanup()
 
 	type Score struct {
-		ID    int    `tempest:"increment"`
-		Score uint64 `tempest:"index"`
+		ID    int    `db:"increment"`
+		Score uint64 `db:"index"`
 	}
 
 	for i := 0; i < 10; i++ {

@@ -99,7 +99,7 @@ func extractField(value *reflect.Value, field *reflect.StructField, m *structCon
 	var f *fieldConfig
 	var err error
 
-	tag := field.Tag.Get("tempest")
+	tag := field.Tag.Get("db")
 	if tag != "" {
 		f = &fieldConfig{
 			Name:           field.Name,

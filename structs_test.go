@@ -18,7 +18,7 @@ type ClassicNoTags struct {
 
 type ClassicBadTags struct {
 	ID           string
-	PublicField  int `tempest:"mrots"`
+	PublicField  int `db:"mrots"`
 	privateField string
 	Date         time.Time
 	InlineStruct struct {
@@ -30,45 +30,45 @@ type ClassicBadTags struct {
 
 type ClassicUnique struct {
 	ID            string
-	PublicField   int       `tempest:"unique"`
-	privateField  string    `tempest:"unique"`
-	privateField2 string    `tempest:"unique"`
-	Date          time.Time `tempest:"unique"`
+	PublicField   int       `db:"unique"`
+	privateField  string    `db:"unique"`
+	privateField2 string    `db:"unique"`
+	Date          time.Time `db:"unique"`
 	InlineStruct  struct {
 		A float32
 		B float64
-	} `tempest:"unique"`
-	Interf io.Writer `tempest:"unique"`
+	} `db:"unique"`
+	Interf io.Writer `db:"unique"`
 }
 
 type ClassicIndex struct {
 	ID           string
-	PublicField  int       `tempest:"index"`
-	privateField string    `tempest:"index"`
-	Date         time.Time `tempest:"index"`
+	PublicField  int       `db:"index"`
+	privateField string    `db:"index"`
+	Date         time.Time `db:"index"`
 	InlineStruct struct {
 		a float32
 		B float64
-	} `tempest:"index"`
-	InlineStructPtr *UserWithNoID `tempest:"index"`
-	Interf          io.Writer     `tempest:"index"`
+	} `db:"index"`
+	InlineStructPtr *UserWithNoID `db:"index"`
+	Interf          io.Writer     `db:"index"`
 }
 
 type ClassicInline struct {
-	PublicField  int `tempest:"unique"`
-	ClassicIndex `tempest:"inline"`
-	*ToEmbed     `tempest:"inline"`
-	Date         time.Time `tempest:"unique"`
+	PublicField  int `db:"unique"`
+	ClassicIndex `db:"inline"`
+	*ToEmbed     `db:"inline"`
+	Date         time.Time `db:"unique"`
 }
 
 type User struct {
-	ID              int       `tempest:"id,increment"`
-	Name            string    `tempest:"index"`
-	Age             int       `tempest:"index,increment"`
-	DateOfBirth     time.Time `tempest:"index"`
+	ID              int       `db:"id,increment"`
+	Name            string    `db:"index"`
+	Age             int       `db:"index,increment"`
+	DateOfBirth     time.Time `db:"index"`
 	Group           string
 	unexportedField int
-	Slug            string `tempest:"unique"`
+	Slug            string `db:"unique"`
 }
 
 type ToEmbed struct {
@@ -76,12 +76,12 @@ type ToEmbed struct {
 }
 
 type NestedID struct {
-	ToEmbed `tempest:"inline"`
+	ToEmbed `db:"inline"`
 	Name    string
 }
 
 type SimpleUser struct {
-	ID   int `tempest:"id"`
+	ID   int `db:"id"`
 	Name string
 	age  int
 }
@@ -106,32 +106,32 @@ type UserWithStringIDField struct {
 }
 
 type UserWithEmbeddedIDField struct {
-	UserWithIDField `tempest:"inline"`
+	UserWithIDField `db:"inline"`
 	Age             int
 }
 
 type UserWithEmbeddedField struct {
-	UserWithNoID `tempest:"inline"`
+	UserWithNoID `db:"inline"`
 	ID           uint64
 }
 
 type UserWithIncrementField struct {
 	ID   int
 	Name string
-	Age  int `tempest:"unique,increment"`
+	Age  int `db:"unique,increment"`
 }
 
 type IndexedNameUser struct {
-	ID          int    `tempest:"id"`
-	Name        string `tempest:"index"`
-	Score       int    `tempest:"index,increment"`
+	ID          int    `db:"id"`
+	Name        string `db:"index"`
+	Score       int    `db:"index,increment"`
 	age         int
-	DateOfBirth time.Time `tempest:"index"`
+	DateOfBirth time.Time `db:"index"`
 	Group       string
 }
 
 type UniqueNameUser struct {
-	ID   int    `tempest:"id"`
-	Name string `tempest:"unique"`
-	Age  int    `tempest:"index,increment"`
+	ID   int    `db:"id"`
+	Name string `db:"unique"`
+	Age  int    `db:"index,increment"`
 }

@@ -14,13 +14,13 @@ import (
 
 // SimpleLogin represents a simple login model
 type SimpleLogin struct {
-	Email    string `tempest:"id"`
+	Email    string `db:"id"`
 	Password string
 }
 
 // SimpleProduct represents a simple product model
 type SimpleProduct struct {
-	Barcode     int `tempest:"id,increment"`
+	Barcode     int `db:"id,increment"`
 	Description string
 }
 

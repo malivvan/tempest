@@ -93,12 +93,12 @@ func BenchmarkOneByID(b *testing.B) {
 	defer cleanup()
 
 	type User struct {
-		ID          int    `tempest:"increment"`
-		Name        string `tempest:"index"`
+		ID          int    `db:"increment"`
+		Name        string `db:"index"`
 		age         int
-		DateOfBirth time.Time `tempest:"index"`
+		DateOfBirth time.Time `db:"index"`
 		Group       string
-		Slug        string `tempest:"unique"`
+		Slug        string `db:"unique"`
 	}
 
 	var u User

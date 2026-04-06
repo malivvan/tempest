@@ -18,12 +18,12 @@ func ExampleDB_Save() {
 	defer os.RemoveAll(dir)
 
 	type User struct {
-		ID        int    `tempest:"id,increment"` // the increment tag will auto-increment integer IDs without existing values.
-		Group     string `tempest:"index"`
-		Email     string `tempest:"unique"`
+		ID        int    `db:"id,increment"` // the increment tag will auto-increment integer IDs without existing values.
+		Group     string `db:"index"`
+		Email     string `db:"unique"`
 		Name      string
-		Age       int       `tempest:"index"`
-		CreatedAt time.Time `tempest:"index"`
+		Age       int       `db:"index"`
+		CreatedAt time.Time `db:"index"`
 	}
 
 	// Open takes an optional list of options as the last argument.
@@ -496,21 +496,21 @@ func ExampleNode_RangeScan() {
 }
 
 type User struct {
-	ID        int    `tempest:"id,increment"`
-	Group     string `tempest:"index"`
-	Email     string `tempest:"unique"`
+	ID        int    `db:"id,increment"`
+	Group     string `db:"index"`
+	Email     string `db:"unique"`
 	Name      string
-	Age       int       `tempest:"index"`
-	CreatedAt time.Time `tempest:"index"`
+	Age       int       `db:"index"`
+	CreatedAt time.Time `db:"index"`
 }
 
 type Account struct {
-	ID     int   `tempest:"id,increment"`
+	ID     int   `db:"id,increment"`
 	Amount int64 // amount in cents
 }
 
 type Note struct {
-	ID   string `tempest:"id"`
+	ID   string `db:"id"`
 	Text string
 }
 

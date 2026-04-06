@@ -63,8 +63,8 @@ func TestReIndex(t *testing.T) {
 	for i := 1; i < 10; i++ {
 		type User struct {
 			ID   int
-			Age  int    `tempest:"index"`
-			Name string `tempest:"unique"`
+			Age  int    `db:"index"`
+			Name string `db:"unique"`
 		}
 
 		u := User{
@@ -88,8 +88,8 @@ func TestReIndex(t *testing.T) {
 	type User struct {
 		ID    int
 		Age   int
-		Name  string `tempest:"index"`
-		Group string `tempest:"unique"`
+		Name  string `db:"index"`
+		Group string `db:"unique"`
 	}
 
 	require.NoError(t, db.ReIndex(new(User)))
@@ -317,9 +317,9 @@ func TestSaveIncrement(t *testing.T) {
 	defer cleanup()
 
 	type User struct {
-		Identifier int    `tempest:"id,increment"`
-		Name       string `tempest:"index,increment"`
-		Age        int    `tempest:"unique,increment=18"`
+		Identifier int    `db:"id,increment"`
+		Name       string `db:"index,increment"`
+		Age        int    `db:"unique,increment=18"`
 	}
 
 	for i := 1; i < 10; i++ {
@@ -380,16 +380,16 @@ func TestSaveEmbedded(t *testing.T) {
 	defer cleanup()
 
 	type Base struct {
-		ID int `tempest:"id,increment"`
+		ID int `db:"id,increment"`
 	}
 
 	type User struct {
-		Base      `tempest:"inline"`
-		Group     string `tempest:"index"`
-		Email     string `tempest:"unique"`
+		Base      `db:"inline"`
+		Group     string `db:"index"`
+		Email     string `db:"unique"`
 		Name      string
 		Age       int
-		CreatedAt time.Time `tempest:"index"`
+		CreatedAt time.Time `db:"index"`
 	}
 
 	user := User{
@@ -450,12 +450,12 @@ func TestUpdate(t *testing.T) {
 	defer cleanup()
 
 	type User struct {
-		ID          int       `tempest:"id,increment"`
-		Name        string    `tempest:"index"`
-		Age         uint64    `tempest:"index,increment"`
-		DateOfBirth time.Time `tempest:"index"`
+		ID          int       `db:"id,increment"`
+		Name        string    `db:"index"`
+		Age         uint64    `db:"index,increment"`
+		DateOfBirth time.Time `db:"index"`
 		Group       string
-		Slug        string `tempest:"unique"`
+		Slug        string `db:"unique"`
 	}
 
 	var u User
@@ -503,12 +503,12 @@ func TestUpdateField(t *testing.T) {
 	defer cleanup()
 
 	type User struct {
-		ID          int       `tempest:"id,increment"`
-		Name        string    `tempest:"index"`
-		Age         uint64    `tempest:"index,increment"`
-		DateOfBirth time.Time `tempest:"index"`
+		ID          int       `db:"id,increment"`
+		Name        string    `db:"index"`
+		Age         uint64    `db:"index,increment"`
+		DateOfBirth time.Time `db:"index"`
 		Group       string
-		Slug        string `tempest:"unique"`
+		Slug        string `db:"unique"`
 	}
 
 	var u User

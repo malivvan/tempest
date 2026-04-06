@@ -78,11 +78,11 @@ func TestExtractInlineWithIndex(t *testing.T) {
 
 func TestExtractMultipleTags(t *testing.T) {
 	type User struct {
-		ID              uint64 `tempest:"id,increment"`
-		Age             uint16 `tempest:"index,increment"`
-		unexportedField int32  `tempest:"index,increment"`
-		X               uint32 `tempest:"unique,increment=100"`
-		Y               int8   `tempest:"index,increment=-100"`
+		ID              uint64 `db:"id,increment"`
+		Age             uint16 `db:"index,increment"`
+		unexportedField int32  `db:"index,increment"`
+		X               uint32 `db:"unique,increment=100"`
+		Y               int8   `db:"index,increment=-100"`
 	}
 
 	s := User{}
@@ -121,7 +121,7 @@ func TestExtractMultipleTags(t *testing.T) {
 	require.NotNil(t, infos.Fields["Y"].Value)
 
 	type NoInt struct {
-		ID uint64 `tempest:"id,increment=hello"`
+		ID uint64 `db:"id,increment=hello"`
 	}
 
 	var n NoInt
@@ -130,7 +130,7 @@ func TestExtractMultipleTags(t *testing.T) {
 	require.Error(t, err)
 
 	type BadSuffix struct {
-		ID uint64 `tempest:"id,incrementag=100"`
+		ID uint64 `db:"id,incrementag=100"`
 	}
 
 	var b BadSuffix

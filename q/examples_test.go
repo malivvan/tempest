@@ -36,12 +36,12 @@ func ExampleRe() {
 }
 
 type User struct {
-	ID        int    `tempest:"id,increment"`
-	Group     string `tempest:"index"`
-	Email     string `tempest:"unique"`
+	ID        int    `db:"id,increment"`
+	Group     string `db:"index"`
+	Email     string `db:"unique"`
 	Name      string
-	Age       int       `tempest:"index"`
-	CreatedAt time.Time `tempest:"index"`
+	Age       int       `db:"index"`
+	CreatedAt time.Time `db:"index"`
 }
 
 func prepareDB() (string, *tempest.DB) {

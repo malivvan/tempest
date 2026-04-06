@@ -68,7 +68,7 @@ func TestNodeWithCodec(t *testing.T) {
 
 		type User struct {
 			ID   int
-			Name string `tempest:"index"`
+			Name string `db:"index"`
 		}
 
 		requireBytesEqual := func(raw []byte, expected interface{}) {
