@@ -11,7 +11,7 @@ const (
 )
 
 func newMeta(b *bolt.Bucket, n Node) (*meta, error) {
-	m := b.Bucket([]byte(metadataBucket))
+	m := b.Bucket(_metaBucket)
 	if m != nil {
 		name := m.Get([]byte(metaCodec))
 		if string(name) != n.Codec().Name() {
@@ -23,7 +23,7 @@ func newMeta(b *bolt.Bucket, n Node) (*meta, error) {
 		}, nil
 	}
 
-	m, err := b.CreateBucket([]byte(metadataBucket))
+	m, err := b.CreateBucket(_metaBucket)
 	if err != nil {
 		return nil, err
 	}

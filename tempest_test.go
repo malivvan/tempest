@@ -40,7 +40,9 @@ func TestOpen(t *testing.T) {
 	require.Equal(t, defaultCodec, db.Codec())
 
 	var v string
-	err = db.Get(dbinfo, "version", &v)
+	b, err := db.getMeta("version")
+	require.NoError(t, err)
+	v = string(b)
 	require.NoError(t, err)
 	require.Equal(t, Version, v)
 }
@@ -92,6 +94,33 @@ func TestBoltDB(t *testing.T) {
 	defer sDB.Close()
 	err = sDB.Save(&SimpleUser{ID: 10})
 	require.NoError(t, err)
+}
+
+func TestMeta(t *testing.T) {
+	dir, _ := os.MkdirTemp(os.TempDir(), "tempest")
+	defer os.RemoveAll(dir)
+	path := filepath.Join(dir, "tempest.db")
+
+	t1 := time.Now().String()
+	func() {
+		db, err := Open(path)
+		require.NoError(t, err)
+		defer db.Close()
+		err = db.setMeta("now", []byte(t1))
+		require.NoError(t, err)
+	}()
+
+	var t2 string
+	func() {
+		db, err := Open(path)
+		require.NoError(t, err)
+		defer db.Close()
+		b, err := db.getMeta("now")
+		require.NoError(t, err)
+		t2 = string(b)
+	}()
+
+	require.Equal(t, t1, t2)
 }
 
 type dummyCodec int

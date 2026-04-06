@@ -10,37 +10,7 @@ import (
 	bolt "go.etcd.io/bbolt"
 )
 
-const (
-	dbinfo         = "__tempest_db"
-	metadataBucket = "__tempest_metadata"
-)
-
-func (s *DB) GetMeta(key []byte) (val []byte, err error) {
-	err = s.Bolt().View(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte{0})
-		if b == nil {
-			return ErrNotFound
-		}
-		v := b.Get(key)
-		if v == nil {
-			return ErrNotFound
-		}
-		val = make([]byte, len(v))
-		copy(val, v)
-		return nil
-	})
-	return
-}
-
-func (s *DB) SetMeta(key, val []byte) error {
-	return s.Bolt().Update(func(tx *bolt.Tx) error {
-		b, err := tx.CreateBucketIfNotExists([]byte{0})
-		if err != nil {
-			return err
-		}
-		return b.Put(key, val)
-	})
-}
+var _metaBucket = []byte{0x00}
 
 // Defaults to json
 var defaultCodec = json.Codec
@@ -116,18 +86,46 @@ func (s *DB) Close() error {
 
 func (s *DB) checkVersion() error {
 	var v string
-	err := s.Get(dbinfo, "version", &v)
+	b, err := s.getMeta("version")
 	if err != nil && err != ErrNotFound {
 		return err
 	}
+	v = string(b)
 
 	// for now, we only set the current version if it doesn't exist.
 	// v1 and v2 database files are compatible.
 	if v == "" {
-		return s.Set(dbinfo, "version", Version)
+		return s.setMeta("version", []byte(Version))
 	}
 
 	return nil
+}
+
+func (s *DB) getMeta(key string) (val []byte, err error) {
+	err = s.Bolt().View(func(tx *bolt.Tx) error {
+		b := tx.Bucket(_metaBucket)
+		if b == nil {
+			return ErrNotFound
+		}
+		v := b.Get([]byte(key))
+		if v == nil {
+			return ErrNotFound
+		}
+		val = make([]byte, len(v))
+		copy(val, v)
+		return nil
+	})
+	return
+}
+
+func (s *DB) setMeta(key string, val []byte) error {
+	return s.Bolt().Update(func(tx *bolt.Tx) error {
+		b, err := tx.CreateBucketIfNotExists(_metaBucket)
+		if err != nil {
+			return err
+		}
+		return b.Put([]byte(key), val)
+	})
 }
 
 // toBytes turns an interface into a slice of bytes
